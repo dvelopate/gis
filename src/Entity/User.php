@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Entity;
 
@@ -12,6 +12,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
+    public const SORTABLE_FIELDS = [
+        'id',
+        'name',
+        'username',
+        'email',
+    ];
+
+    public const SORT_DIRECTIONS = [
+        'asc',
+        'desc',
+    ];
+    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -38,6 +50,9 @@ class User
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user", orphanRemoval=true)
      */
     private $posts;
+    
+    /** @ORM\Column(type="integer", length=255  */
+    private $userId;
 
     public function __construct()
     {
@@ -85,9 +100,6 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection|Post[]
-     */
     public function getPosts(): Collection
     {
         return $this->posts;
@@ -107,11 +119,17 @@ class User
     {
         if ($this->posts->contains($post)) {
             $this->posts->removeElement($post);
-            // set the owning side to null (unless already changed)
             if ($post->getUser() === $this) {
                 $post->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function setUserId($userId): self
+    {
+        $this->userId = $userId;
 
         return $this;
     }

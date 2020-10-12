@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Entity;
 
@@ -10,6 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Post
 {
+    public const SORTABLE_FIELDS = [
+        'id',
+        'title',
+        'body',
+    ];
+
+    public const SORT_DIRECTIONS = [
+        'asc',
+        'desc',
+    ];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
