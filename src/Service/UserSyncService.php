@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\ResponseHash;
 use App\Repository\ResponseHashRepository;
 use GuzzleHttp\Client;
 use App\Repository\UserRepository;
@@ -61,7 +60,7 @@ class UserSyncService
                 ->setName($singleUser['name'])
                 ->setEmail($singleUser['email'])
                 ->setUsername($singleUser['username'])
-                ->setUserId($singleUser['userId'])
+                ->setUserId($singleUser['id'])
             ;
 
             $this->userRepository->save($user);

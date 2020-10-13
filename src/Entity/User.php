@@ -50,8 +50,10 @@ class User
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user", orphanRemoval=true)
      */
     private $posts;
-    
-    /** @ORM\Column(type="integer", length=255  */
+
+    /**
+     * @ORM\Column(type="integer", length=8)
+     */
     private $userId;
 
     public function __construct()
@@ -132,5 +134,10 @@ class User
         $this->userId = $userId;
 
         return $this;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->userId;
     }
 }

@@ -47,13 +47,13 @@ class PostController extends AbstractController
     public function showUserPosts(
         Request $request,
         PostRepository $postRepository,
-        UserRepository $userRepository
+        UserRepository $userRepository,
+        int $id
     ): JsonResponse
     {
         $sort = $this->generateSort($request->query->all());
-
-
-        $user = $userRepository->findOneBy(['userId' => $request->get('userId')]);
+        
+        $user = $userRepository->findOneBy(['id' => $id]);
 
         if ($user === null) {
             return new JsonResponse(['message' => 'Requested user does not exist'], 200);
@@ -78,7 +78,7 @@ class PostController extends AbstractController
         foreach ($posts as $post) {
             $responseBody[] = [
                 'id' => $post->getId(),
-                'userId' => $post->getUser()->getId(),
+                'userId' => $post->getUser()->getUserId(),
                 'title' => $post->getTitle(),
                 'body' => $post->getBody(),
             ];

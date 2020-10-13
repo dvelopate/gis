@@ -28,8 +28,8 @@ class PostRepository extends ServiceEntityRepository
     public function clean()
     {
         $queryString = "DELETE FROM post WHERE 1";
-        
-        $query = $this->_em->createQuery($queryString);
+
+        $query = $this->_em->getConnection()->prepare($queryString);
         $query->execute();
     }
 }

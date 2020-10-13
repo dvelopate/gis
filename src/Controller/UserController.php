@@ -49,6 +49,7 @@ class UserController extends AbstractController
         foreach ($users as $user) {
             $responseBody[] = [
                 'id' => $user->getId(),
+                'userId' => $user->getUserId(),
                 'name' => $user->getName(),
                 'username' => $user->getUsername(),
                 'email' => $user->getEmail(),

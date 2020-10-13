@@ -29,7 +29,8 @@ class UserRepository extends ServiceEntityRepository
     {
         $queryString = "DELETE FROM user WHERE 1";
 
-        $query = $this->_em->createQuery($queryString);
+        $query = $this->_em->getConnection()->prepare($queryString);
         $query->execute();
+
     }
 }
