@@ -2,6 +2,7 @@ Installation:
 
 1. Create a new folder and create a new file called docker-compose.yml
 2. Paste the following inside the yml file:
+```
 version: '2'
 
 services:
@@ -27,5 +28,5 @@ services:
       - MARIADB_USER=guest
       - MARIADB_PASSWORD=guest
       - MARIADB_DATABASE=gis
-
+```
 3. open your terminal in the project folder and run: #docker-compose up
