@@ -46,6 +46,7 @@ services:
 
 8. Once inside the container, start the install script for container dependencies
   ```
+  cd gis
   ./install.sh
   ```
   
