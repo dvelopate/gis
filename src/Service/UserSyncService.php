@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exception\SyncException;
 use App\Repository\ResponseHashRepository;
 use GuzzleHttp\Client;
 use App\Repository\UserRepository;
@@ -48,7 +49,11 @@ class UserSyncService
         if ($this->responseHashService->handleResponseHash($result, $this->endpoint)) {
             $this->userRepository->clean();
             $this->import(json_decode($result, true));
+            
+             return;
         }
+
+        throw new SyncException($this->endpoint);
     }
 
     private function import(array $result)

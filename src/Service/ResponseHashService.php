@@ -54,7 +54,7 @@ class ResponseHashService
         return false;
     }
     
-    private function hashResponseData(string $response)
+    private function hashResponseData(string $response): string
     {
         return hash_hmac($this->hashAlgorithm, $response, $this->hashSalt);
     }

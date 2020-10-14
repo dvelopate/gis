@@ -2,6 +2,8 @@
 
 namespace App\Command;
 
+use App\Exception\SyncException;
+use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,14 +39,11 @@ class SyncPostsCommand extends Command
 
         try {
             $this->postSyncService->sync();
-        } catch (Exception $exception) {
-            $io->warning($exception->getMessage());
-
-            return Command::FAILURE;
+            $io->success('Post sync completed');
+        } catch (SyncException $exception) {
+            $io->note($exception->getMessage());
         }
-
-        $io->success('Post sync completed');
-
+        
         return Command::SUCCESS;
     }
 }
