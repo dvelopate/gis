@@ -19,7 +19,7 @@ class ResponseHashRepository extends ServiceEntityRepository
         parent::__construct($registry, ResponseHash::class);
     }
 
-    public function save(ResponseHash $responseHash)
+    public function save(ResponseHash $responseHash): void
     {
         $this->_em->persist($responseHash);
         $this->_em->flush();

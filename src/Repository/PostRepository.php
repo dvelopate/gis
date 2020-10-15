@@ -19,13 +19,13 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function save(Post $post)
+    public function save(Post $post): void
     {
         $this->_em->persist($post);
         $this->_em->flush();
     }
     
-    public function clean()
+    public function clean(): void
     {
         $queryString = "DELETE FROM post WHERE 1";
 

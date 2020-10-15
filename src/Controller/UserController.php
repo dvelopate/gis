@@ -21,7 +21,7 @@ class UserController extends AbstractController
         UserResponseService $userResponseService
     ): JsonResponse
     {
-	$criteria = [];
+        $criteria = [];
         $sort = $userResponseService->generateSort($request->query->all());
         $result = $userRepository->findBy($criteria, $sort);
 

@@ -13,7 +13,6 @@ use App\Repository\UserRepository;
 /** @Route("/post", name="post_") */
 class PostController extends AbstractController
 {
-
     /**
      * @Route("", name="list",  methods="GET")
      */
@@ -46,7 +45,7 @@ class PostController extends AbstractController
         $result = $postRepository->findOneBy(['id' => $id], $sort);
 
         if ($result === null) {
-            return new JsonResponse(['message' => 'Requested post does not exist'], 200);
+            return new JsonResponse(['message' => 'Requested post does not exist'], 404);
         }
 
         return new JsonResponse(
@@ -69,7 +68,7 @@ class PostController extends AbstractController
         $user = $userRepository->findOneBy(['id' => $id]);
 
         if ($user === null) {
-            return new JsonResponse(['message' => 'Requested user does not exist'], 200);
+            return new JsonResponse(['message' => 'Requested user does not exist'], 404);
         }
 
         $userPosts = $postRepository->findBy(['user' => $user], $sort);

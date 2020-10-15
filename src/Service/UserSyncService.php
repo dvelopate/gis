@@ -10,15 +10,13 @@ use App\Entity\User;
 
 class UserSyncService
 {
-    /**
-     * @var int $endpoint
-     */
+    /** @var int $endpoint */
     private $endpoint;
     
-    /** @var UserRepository  */
+    /** @var UserRepository */
     private $userRepository;
 
-    /** @var ResponseHashRepository  */
+    /** @var ResponseHashRepository */
     private $responseHashRepository;
     
     /** @var ResponseHashService */
@@ -56,7 +54,7 @@ class UserSyncService
         throw new SyncException($this->endpoint);
     }
 
-    private function import(array $result)
+    private function import(array $result): void
     {
         foreach ($result as $singleUser) {
             $user = new User();

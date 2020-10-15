@@ -20,7 +20,7 @@ class SyncUsersCommand extends Command
         $this->userSyncService = $userSyncService;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Sync users from the mock API')

@@ -6,9 +6,7 @@ use App\Entity\User;
 
 class UserResponseService
 {
-    /**
-     * @var User[] $users
-     */
+    /** @var User[] $users */
     public function populateResponseBody(array $users): array
     {
         $responseBody = [];
