@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Exception\SyncException;
+use App\Repository\PostRepository;
 use App\Repository\ResponseHashRepository;
 use GuzzleHttp\Client;
 use App\Repository\UserRepository;
@@ -16,6 +17,9 @@ class UserSyncService
     /** @var UserRepository */
     private $userRepository;
 
+    /** @var PostRepository */
+    private $postRepository;
+
     /** @var ResponseHashRepository */
     private $responseHashRepository;
     
@@ -25,11 +29,13 @@ class UserSyncService
     public function __construct(
         string $userEndpoint,
         UserRepository $userRepository,
+        PostRepository $postRepository,
         ResponseHashRepository $responseHashRepository,
         ResponseHashService $responseHashService
     ) {
         $this->endpoint = $userEndpoint;
         $this->userRepository = $userRepository;
+        $this->postRepository = $postRepository;
         $this->responseHashRepository = $responseHashRepository;
         $this->responseHashService = $responseHashService;
     }
@@ -45,10 +51,11 @@ class UserSyncService
         $result = $response->getBody()->getContents();
 
         if ($this->responseHashService->handleResponseHash($result, $this->endpoint)) {
+            $this->postRepository->clean();
             $this->userRepository->clean();
             $this->import(json_decode($result, true));
             
-             return;
+            return;
         }
 
         throw new SyncException($this->endpoint);

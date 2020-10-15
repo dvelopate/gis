@@ -65,7 +65,7 @@ class PostController extends AbstractController
     ): JsonResponse
     {
         $sort = $postResponseService->generateSort($request->query->all());
-        $user = $userRepository->findOneBy(['id' => $id]);
+        $user = $userRepository->findOneBy(['userId' => $id]);
 
         if ($user === null) {
             return new JsonResponse(['message' => 'Requested user does not exist'], 404);

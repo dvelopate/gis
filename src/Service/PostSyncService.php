@@ -49,15 +49,9 @@ class PostSyncService
         ]);
 
         $result = $response->getBody()->getContents();
-
-        if ($this->responseHashService->handleResponseHash($result, $this->endpoint)) {
-            $this->postRepository->clean();
-            $this->import(json_decode($result, true));
-            
-            return;
-        }
         
-        throw new SyncException($this->endpoint);
+        $this->postRepository->clean();
+        $this->import(json_decode($result, true));
     }
 
     private function import(array $result): void

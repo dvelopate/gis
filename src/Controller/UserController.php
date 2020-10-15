@@ -40,10 +40,10 @@ class UserController extends AbstractController
         int $id): JsonResponse
     {
         $sort = $userResponseService->generateSort($request->query->all());
-        $result = $userRepository->findOneBy(['id' => $id], $sort);
+        $result = $userRepository->findOneBy(['userId' => $id], $sort);
 
         return new JsonResponse(
-            ['data' => $this->populateResponseBody([$result])], 200
+            ['data' => $userResponseService->populateResponseBody([$result])], 200
         );
     }
 }
