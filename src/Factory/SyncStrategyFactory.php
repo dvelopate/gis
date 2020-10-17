@@ -13,6 +13,9 @@ use InvalidArgumentException;
 
 class SyncStrategyFactory
 {
+    public const USER = 'user';
+    public const POST = 'post';
+
     /** @var UserRepository */
     private $userRepository;
 
@@ -50,7 +53,7 @@ class SyncStrategyFactory
     public function build(string $type): SyncStrategyInterface
     {
         switch ($type) {
-            case 'user':
+            case self::USER:
                 return new User(
                     $this->userRepository,
                     $this->postRepository,
@@ -60,7 +63,7 @@ class SyncStrategyFactory
                 );
 
                 break;
-            case 'post':
+            case self::POST:
                 return new Post(
                     $this->userRepository,
                     $this->postRepository,

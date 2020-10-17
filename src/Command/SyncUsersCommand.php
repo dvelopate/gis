@@ -37,7 +37,7 @@ class SyncUsersCommand extends Command
         $io->note('User sync started');
 
         try {
-            $context = new SyncContext($this->syncStrategyFactory->build('user'));
+            $context = new SyncContext($this->syncStrategyFactory->build(SyncStrategyFactory::USER));
             $context->sync();
             $io->success('User sync completed');
         } catch (SyncException $exception) {

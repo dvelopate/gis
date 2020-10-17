@@ -37,7 +37,7 @@ class SyncPostsCommand extends Command
         $io->note('Post sync started');
 
         try {
-            $context = new SyncContext($this->syncStrategyFactory->build('post'));
+            $context = new SyncContext($this->syncStrategyFactory->build(SyncStrategyFactory::POST));
             $context->sync();
             $io->success('Post sync completed');
         } catch (InvalidArgumentException $exception) {
