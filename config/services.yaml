@@ -23,13 +23,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Service\PostSyncService:
+    App\Factory\SyncStrategyFactory:
         arguments:
             $postEndpoint: '%env(post_endpoint)%'
-
-    App\Service\UserSyncService:
-        arguments:
             $userEndpoint: '%env(user_endpoint)%'
+
     App\Service\ResponseHashService:
         arguments:
             $hashSalt: '%env(hash_salt)%'

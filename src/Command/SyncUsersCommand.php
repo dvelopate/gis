@@ -3,21 +3,23 @@
 namespace App\Command;
 
 use App\Exception\SyncException;
+use App\Factory\SyncStrategyFactory;
+use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use App\Service\UserSyncService;
+use App\Strategy\Sync\SyncContext;
 
 class SyncUsersCommand extends Command
 {
-    /** @var UserSyncService  */
-    private $userSyncService;
-    
-    public function __construct(UserSyncService $userSyncService)
+    /** @var SyncStrategyFactory */
+    private $syncStrategyFactory;
+
+    public function __construct(SyncStrategyFactory $syncStrategyFactory)
     {
         parent::__construct();
-        $this->userSyncService = $userSyncService;
+        $this->syncStrategyFactory = $syncStrategyFactory;
     }
 
     protected function configure(): void
@@ -35,16 +37,21 @@ class SyncUsersCommand extends Command
         $io->note('User sync started');
 
         try {
-            $this->userSyncService->sync();
+            $context = new SyncContext($this->syncStrategyFactory->build('user'));
+            $context->sync();
             $io->success('User sync completed');
         } catch (SyncException $exception) {
             $io->note($exception->getMessage());
+        } catch (InvalidArgumentException $exception) {
+            $io->error($exception->getMessage());
+
+            return Command::FAILURE;
         }
-        
+
         // we're calling post sync command within this command to make sure users are synced properly
         $command = $this->getApplication()->find('app:sync-posts');
         $command->run($input, $output);
-
+        
         return Command::SUCCESS;
     }
 }

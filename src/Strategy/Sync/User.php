@@ -1,19 +1,20 @@
 <?php declare(strict_types = 1);
 
-namespace App\Service;
+namespace App\Strategy\Sync;
 
 use App\Exception\SyncException;
 use App\Repository\PostRepository;
 use App\Repository\ResponseHashRepository;
-use GuzzleHttp\Client;
 use App\Repository\UserRepository;
-use App\Entity\User;
+use App\Service\ResponseHashService;
+use GuzzleHttp\Client;
+use App\Entity\User as UserEntity;
 
-class UserSyncService
+class User extends SyncStrategyInterface
 {
-    /** @var int $endpoint */
+    /** @var string $endpoint */
     private $endpoint;
-    
+
     /** @var UserRepository */
     private $userRepository;
 
@@ -22,22 +23,22 @@ class UserSyncService
 
     /** @var ResponseHashRepository */
     private $responseHashRepository;
-    
+
     /** @var ResponseHashService */
     private $responseHashService;
-    
+
     public function __construct(
-        string $userEndpoint,
         UserRepository $userRepository,
         PostRepository $postRepository,
         ResponseHashRepository $responseHashRepository,
-        ResponseHashService $responseHashService
+        ResponseHashService $responseHashService,
+        string $userEndpoint
     ) {
-        $this->endpoint = $userEndpoint;
         $this->userRepository = $userRepository;
         $this->postRepository = $postRepository;
         $this->responseHashRepository = $responseHashRepository;
         $this->responseHashService = $responseHashService;
+        $this->endpoint = $userEndpoint;
     }
 
     public function sync(): void
@@ -54,7 +55,7 @@ class UserSyncService
             $this->postRepository->clean();
             $this->userRepository->clean();
             $this->import(json_decode($result, true));
-            
+
             return;
         }
 
@@ -64,7 +65,7 @@ class UserSyncService
     private function import(array $result): void
     {
         foreach ($result as $singleUser) {
-            $user = new User();
+            $user = new UserEntity();
 
             $user
                 ->setName($singleUser['name'])

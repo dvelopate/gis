@@ -1,25 +1,21 @@
 <?php declare(strict_types = 1);
 
-namespace App\Service;
+namespace App\Strategy\Sync;
 
-use App\Exception\SyncException;
-use App\Repository\ResponseHashRepository;
-use GuzzleHttp\Client;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
-use App\Entity\Post;
+use App\Service\ResponseHashService;
+use GuzzleHttp\Client;
+use App\Entity\Post as PostEntity;
 
-class PostSyncService
+class Post extends SyncStrategyInterface
 {
-    /** @var int $endpoint */
-    private $endpoint;
-    
-    /** @var ResponseHashRepository */
-    private $responseHashRepository;
-    
-    /** @var PostRepository */
+    /** @var string */
+    private $postEndpoint;
+
+    /** @var PostRepository  */
     private $postRepository;
-    
+
     /** @var UserRepository */
     private $userRepository;
     
@@ -27,37 +23,37 @@ class PostSyncService
     private $responseHashService;
 
     public function __construct(
-        string $postEndpoint,
-        PostRepository $postRepository,
         UserRepository $userRepository,
-        ResponseHashRepository $responseHashRepository,
-        ResponseHashService $responseHashService
+        PostRepository $postRepository,
+        ResponseHashService $responseHashService,
+        string $postEndpoint
     ) {
-        $this->endpoint = $postEndpoint;
         $this->postRepository = $postRepository;
         $this->userRepository = $userRepository;
-        $this->responseHashRepository = $responseHashRepository;
         $this->responseHashService = $responseHashService;
+        $this->postEndpoint = $postEndpoint;
     }
 
     public function sync(): void
     {
         $client = new Client();
 
-        $response = $client->request('GET', $this->endpoint, [
+        $response = $client->request('GET', $this->postEndpoint, [
             'Content-Type' => 'application/json',
         ]);
 
         $result = $response->getBody()->getContents();
-        
+
+        $this->responseHashService->handleResponseHash($result, $this->postEndpoint);
+
         $this->postRepository->clean();
         $this->import(json_decode($result, true));
     }
-
+    
     private function import(array $result): void
     {
         foreach ($result as $singlePost) {
-            $post = new Post();
+            $post = new PostEntity();
 
             $post
                 ->setUser($this->userRepository->findOneBy(['userId' => $singlePost['userId']]))
