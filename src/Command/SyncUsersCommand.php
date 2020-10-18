@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use App\Exception\SyncException;
-use App\Factory\SyncStrategyFactory;
+use App\Strategy\Sync\SyncStrategyFactory;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

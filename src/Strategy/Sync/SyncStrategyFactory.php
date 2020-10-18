@@ -1,14 +1,11 @@
 <?php declare(strict_types = 1);
 
-namespace App\Factory;
+namespace App\Strategy\Sync;
 
 use App\Repository\PostRepository;
 use App\Repository\ResponseHashRepository;
 use App\Repository\UserRepository;
 use App\Service\ResponseHashService;
-use App\Strategy\Sync\SyncStrategyInterface;
-use App\Strategy\Sync\User;
-use App\Strategy\Sync\Post;
 use InvalidArgumentException;
 
 class SyncStrategyFactory
